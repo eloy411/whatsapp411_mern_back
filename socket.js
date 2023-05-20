@@ -45,10 +45,10 @@ Socket.connection = (io) => {
         })
 
         socket.on('exitChat',async (data)=>{
+            let owner = data.fields.owner;
             await dropInroom(data)
             let socketId = await getFriendSocket(data)
-            console.log(socketId)
-            io.to(socketId).emit('friend-disconected',{friendDisconected:true})
+            io.to(socketId).emit('friend-disconected',{friendDisconected:true,who:owner})
         })
 
         socket.on('sendMessage',async (data)=>{
@@ -60,6 +60,9 @@ Socket.connection = (io) => {
             await addFriendAlert(data)
             let friendConnected = await nowInroom(data)
 
+            console.log(data)
+            console.log(friendConnected)
+
             let room1 = adapter.rooms.get(`${owner}&${friend}`);
             let room2 = adapter.rooms.get(`${friend}&${owner}`);
 
@@ -67,7 +70,6 @@ Socket.connection = (io) => {
                 room1 = `${owner}&${friend}`
                 let convers = await getConvers(data)
                 if(friendConnected[0]){
-                    console.log(friendConnected)
                     io.to(friendConnected[1]).emit('message')
                 }else{
                     io.to(room1).emit('convers',{con:convers,inroom:owner})
@@ -76,9 +78,9 @@ Socket.connection = (io) => {
             }else{
                 room2 = `${friend}&${owner}`
                 let convers = await getConvers(data)
-                // console.log(room2.size)
+
                 if(friendConnected[0]){
-                    console.log(friendConnected)
+
                     io.to(friendConnected[1]).emit('message')
                 }else{
                     io.to(room2).emit('convers',{con:convers,inroom:owner})
@@ -89,7 +91,6 @@ Socket.connection = (io) => {
 
         socket.on('getAlert',async(data)=>{
               let response = await getAlerts(data)
-              console.log(data)
               socket.emit('alert',{alert:response})
         })
 

@@ -97,7 +97,7 @@ user.saveMessage = async (data) => {
             await appendFile(file2, `\n${owner}:${message}`);
           } catch (error) {
             if (error.code === 'ENOENT') {
-              console.log('Estoy aquí');
+
               await writeFile(file2, `${owner}:${message}`);
             } else {
               throw error;
@@ -123,7 +123,7 @@ user.addFriendAlert = async (data)=>{
 
         await Users.updateOne({nombre:friend},
         {$addToSet:{messageFriends:owner}})
-        console.log('en principio lo ha agregado')
+
     }
 
 
@@ -249,13 +249,12 @@ user.disconnect = async(data)=>{
   await Users.updateOne({id_socket:data},
     {inRoom:null},{new:true})
 
-  console.log('ya se ha ejecutado esta')
+
 }
 
 user.getFriendSocket=async(data)=>{
 
   let friend = data.fields.friend;
-  console.log(friend)
   const user =await Users.findOne({nombre:friend})
   if(user){
     return user.id_socket
