@@ -1,0 +1,2 @@
+const mongoose= require("mongoose")
+mongoose.connect("mongodb+srv://castillolopezeloy1:EOgr7Zb51OZL5qX5@cluster0.rdsajbm.mongodb.net/?retryWrites=true&w=majority").then(()=>{console.log("db connect")}) 
